@@ -1,0 +1,44 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+X = np.array([
+    [0, 0],
+    [0, 1],
+    [1, 0],
+    [1, 1]
+])
+
+y = np.array([0, 0, 0, 1])
+
+weights = np.zeros(2)
+bias = 0
+learning_rate = 0.1
+epochs = 10
+
+for epoch in range(epochs):
+    for i in range(len(X)):
+        net = np.dot(X[i], weights) + bias
+        output = 1 if net >= 0 else 0
+        error = y[i] - output
+        weights += learning_rate * error * X[i]
+        bias += learning_rate * error
+
+predictions = []
+
+print("Input\tTarget\tPrediction")
+for i in range(len(X)):
+    net = np.dot(X[i], weights) + bias
+    pred = 1 if net >= 0 else 0
+    predictions.append(pred)
+    print(f"{X[i]}\t{y[i]}\t{pred}")
+
+plt.figure(figsize=(6,4))
+plt.scatter(range(len(y)), y, label="Actual", marker="o")
+plt.scatter(range(len(predictions)), predictions, label="Predicted", marker="x")
+plt.xticks(range(len(y)), ['00', '01', '10', '11'])
+plt.xlabel("Input")
+plt.ylabel("Output")
+plt.title("Single Layer Perceptron")
+plt.legend()
+plt.grid(True)
+plt.show()
