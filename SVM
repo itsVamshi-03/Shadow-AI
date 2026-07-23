@@ -1,0 +1,43 @@
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_digits
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+digits = load_digits()
+
+X = digits.data
+y = digits.target
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+svm = SVC(kernel='rbf', random_state=42)
+svm.fit(X_train, y_train)
+svm_pred = svm.predict(X_test)
+svm_acc = accuracy_score(y_test, svm_pred)
+
+lr = LogisticRegression(max_iter=5000, random_state=42)
+lr.fit(X_train, y_train)
+lr_pred = lr.predict(X_test)
+lr_acc = accuracy_score(y_test, lr_pred)
+
+print("SVM Accuracy:", svm_acc)
+print("Logistic Regression Accuracy:", lr_acc)
+
+models = ["SVM", "Logistic Regression"]
+accuracy = [svm_acc, lr_acc]
+
+plt.figure(figsize=(6,5))
+plt.bar(models, accuracy)
+plt.title("Accuracy Comparison")
+plt.xlabel("Algorithms")
+plt.ylabel("Accuracy")
+plt.ylim(0.8, 1.0)
+
+for i, v in enumerate(accuracy):
+    plt.text(i, v + 0.005, f"{v:.3f}", ha='center')
+
+plt.show()
